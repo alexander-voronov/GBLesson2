@@ -4,18 +4,22 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import java.lang.Thread.sleep
 
-class MainViewModel(private val liveDataToObserve: MutableLiveData<Any> = MutableLiveData()) :
+class MainViewModel(private val liveDataToObserve: MutableLiveData<AppState> = MutableLiveData()) :
     ViewModel() {
 
-    fun getLiveData(): MutableLiveData<Any> {
-        getDataFromLocALsOURCE()
+    fun getLiveData(): MutableLiveData<AppState> {
         return liveDataToObserve
     }
 
-    private fun getDataFromLocALsOURCE() {
+    private fun getDataFromLocalSource() {
         Thread {
             sleep(2000)
-            liveDataToObserve.postValue(Any())
+            liveDataToObserve.postValue(AppState.Success(Any()))
         }.start()
+    }
+
+    fun load() {
+        liveDataToObserve.postValue(AppState.Loading)
+        getDataFromLocalSource()
     }
 }

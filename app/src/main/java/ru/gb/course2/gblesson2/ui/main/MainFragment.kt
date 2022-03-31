@@ -7,7 +7,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
+import com.google.android.material.snackbar.Snackbar
 import ru.gb.course2.gblesson2.R
 import ru.gb.course2.gblesson2.databinding.FragmentMainBinding
 
@@ -33,14 +35,32 @@ class MainFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
-        val observer = Observer<Any> {
+        val observer = Observer<AppState> {
             renderData(it)
         }
         viewModel.getLiveData().observe(viewLifecycleOwner, observer)
+        viewModel.load()
         binding.message.text = "Text"
     }
 
-    private fun renderData(it: Any?) {
+    private fun renderData(appState: AppState) {
+        when (appState) {
+            is AppState.Success -> {
+                binding.loadingLayout.visibility = View.GONE
+                binding.mainView.isVisible = true
+            }
+            is AppState.Loading -> {
+                binding.loadingLayout.isVisible = true
+                binding.mainView.isVisible = false
+            }
+            is AppState.Error -> {
+                binding.loadingLayout.visibility = View.GONE
+                binding.mainView.isVisible = true
+                Snackbar.make(binding.mainView, "Error", Snackbar.LENGTH_INDEFINITE)
+                    .setAction("reload") { viewModel.load() }
+                    .show()
+            }
+        }
         Toast.makeText(requireContext(), "data", Toast.LENGTH_SHORT).show()
     }
 
@@ -48,5 +68,4 @@ class MainFragment : Fragment() {
         super.onDestroyView()
         _binding = null
     }
-
 }
