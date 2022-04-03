@@ -10,7 +10,9 @@ import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import com.google.android.material.snackbar.Snackbar
+import ru.gb.course2.gblesson2.AppState
 import ru.gb.course2.gblesson2.R
+import ru.gb.course2.gblesson2.Weather
 import ru.gb.course2.gblesson2.databinding.FragmentMainBinding
 
 class MainFragment : Fragment() {
@@ -39,29 +41,43 @@ class MainFragment : Fragment() {
             renderData(it)
         }
         viewModel.getLiveData().observe(viewLifecycleOwner, observer)
-        viewModel.load()
-        binding.message.text = "Text"
+        viewModel.getWeatherFromLocalSource()
     }
 
     private fun renderData(appState: AppState) {
         when (appState) {
             is AppState.Success -> {
-                binding.loadingLayout.visibility = View.GONE
-                binding.mainView.isVisible = true
+                showLoading(false)
+                val weatherData = appState.weather
+                setData(weatherData)
             }
             is AppState.Loading -> {
-                binding.loadingLayout.isVisible = true
-                binding.mainView.isVisible = false
+                showLoading(true)
             }
             is AppState.Error -> {
-                binding.loadingLayout.visibility = View.GONE
-                binding.mainView.isVisible = true
+                showLoading(false)
                 Snackbar.make(binding.mainView, "Error", Snackbar.LENGTH_INDEFINITE)
-                    .setAction("reload") { viewModel.load() }
+                    .setAction("reload") { viewModel.getWeatherFromLocalSource() }
                     .show()
             }
         }
         Toast.makeText(requireContext(), "data", Toast.LENGTH_SHORT).show()
+    }
+
+    private fun setData(weatherData: Weather) {
+        binding.cityName.text = weatherData.city.city
+        binding.cityCoordinates.text = String.format(
+            getString(R.string.city_coordinates),
+            weatherData.city.lat.toString(),
+            weatherData.city.lon.toString()
+        )
+        binding.temperatureValue.text = weatherData.temperature.toString()
+        binding.feelsLikeValue.text = weatherData.feelsLike.toString()
+    }
+
+    private fun showLoading(isShow: Boolean) {
+        binding.loadingLayout.isVisible = isShow
+        binding.mainView.isVisible = !isShow
     }
 
     override fun onDestroyView() {
