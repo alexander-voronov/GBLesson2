@@ -1,4 +1,6 @@
-package ru.gb.course2.gblesson2
+package ru.gb.course2.gblesson2.data
+
+import ru.gb.course2.gblesson2.data.City
 
 data class Weather(
     val city: City = getDefaultCity(),

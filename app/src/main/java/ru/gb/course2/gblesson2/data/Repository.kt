@@ -1,4 +1,6 @@
-package ru.gb.course2.gblesson2
+package ru.gb.course2.gblesson2.data
+
+import ru.gb.course2.gblesson2.data.Weather
 
 class Repository : IRepository {
     override fun getWeatherFromServer(): Weather {

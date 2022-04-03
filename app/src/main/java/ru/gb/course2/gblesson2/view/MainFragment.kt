@@ -1,4 +1,4 @@
-package ru.gb.course2.gblesson2.ui.main
+package ru.gb.course2.gblesson2.view
 
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
@@ -10,9 +10,10 @@ import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import com.google.android.material.snackbar.Snackbar
-import ru.gb.course2.gblesson2.AppState
+import ru.gb.course2.gblesson2.data.AppState
+import ru.gb.course2.gblesson2.viewmodel.MainViewModel
 import ru.gb.course2.gblesson2.R
-import ru.gb.course2.gblesson2.Weather
+import ru.gb.course2.gblesson2.data.Weather
 import ru.gb.course2.gblesson2.databinding.FragmentMainBinding
 
 class MainFragment : Fragment() {
@@ -61,7 +62,6 @@ class MainFragment : Fragment() {
                     .show()
             }
         }
-        Toast.makeText(requireContext(), "data", Toast.LENGTH_SHORT).show()
     }
 
     private fun setData(weatherData: Weather) {

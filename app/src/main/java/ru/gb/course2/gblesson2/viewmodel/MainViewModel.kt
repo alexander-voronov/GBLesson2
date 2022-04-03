@@ -1,10 +1,10 @@
-package ru.gb.course2.gblesson2.ui.main
+package ru.gb.course2.gblesson2.viewmodel
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import ru.gb.course2.gblesson2.AppState
-import ru.gb.course2.gblesson2.IRepository
-import ru.gb.course2.gblesson2.Repository
+import ru.gb.course2.gblesson2.data.AppState
+import ru.gb.course2.gblesson2.data.IRepository
+import ru.gb.course2.gblesson2.data.Repository
 import java.lang.Thread.sleep
 
 class MainViewModel(
