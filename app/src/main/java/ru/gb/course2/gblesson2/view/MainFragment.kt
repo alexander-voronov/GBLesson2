@@ -23,15 +23,17 @@ class MainFragment : Fragment() {
     }
     private val adapter = MainFragmentAdapter(object : OnItemViewClickListener {
         override fun onItemClick(weather: Weather) {
-            val manager = activity?.supportFragmentManager
-            if (manager != null) {
-                val bundle = Bundle()
-                bundle.putParcelable(DetailFragment.BUNDLE_EXTRA, weather)
-                manager.beginTransaction()
-                    .replace(R.id.container, DetailFragment.newInstance(bundle))
-                    .addToBackStack("")
-                    .commitAllowingStateLoss()
-            }
+            activity?.supportFragmentManager?.beginTransaction()?.replace(
+                R.id.container,
+                DetailFragment().also { fragment ->
+                    fragment.arguments = Bundle().also { bundle ->
+                        bundle.putParcelable(
+                            DetailFragment.BUNDLE_EXTRA,
+                            weather
+                        )
+                    }
+                }
+            )?.addToBackStack("")?.commit()
         }
     })
     private var isDataSetRus: Boolean = true
@@ -49,7 +51,7 @@ class MainFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         binding.mainFragmentRecyclerView.adapter = adapter
         binding.mainFragmentFAB.setOnClickListener { changeWeatherDataSet() }
-        viewModel.getLiveData().observe(viewLifecycleOwner, Observer { renderData(it) })
+        viewModel.liveData.observe(viewLifecycleOwner, Observer { renderData(it) })
         viewModel.getWeatherFromLocalSourceRus()
     }
 
