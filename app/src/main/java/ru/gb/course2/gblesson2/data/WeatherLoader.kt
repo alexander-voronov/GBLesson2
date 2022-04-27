@@ -5,14 +5,13 @@ import android.os.Handler
 import android.util.Log
 import androidx.annotation.RequiresApi
 import com.google.gson.Gson
+import ru.gb.course2.gblesson2.BuildConfig
 import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.net.MalformedURLException
 import java.net.URL
 import java.util.stream.Collectors
 import javax.net.ssl.HttpsURLConnection
-
-private const val YOUR_API_KEY = "aab7df1b-2d95-4202-af43-6aad806bee38"
 
 class WeatherLoader(
     private val listener: WeatherLoaderListener,
@@ -39,7 +38,7 @@ class WeatherLoader(
                         urlConnection.requestMethod = "GET"
                         urlConnection.addRequestProperty(
                             "X-Yandex-API-Key",
-                            YOUR_API_KEY
+                            BuildConfig.WEATHER_API_KEY
                         )
                         urlConnection.readTimeout = 10000
                         val bufferedReader =
